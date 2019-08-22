@@ -1,5 +1,7 @@
 {
   "name": "aitester",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
