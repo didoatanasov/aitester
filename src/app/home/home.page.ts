@@ -23,9 +23,9 @@ export class HomePage implements OnInit {
   images = [];
 
   constructor(private camera: Camera, private file: File, private http: HttpClient, private webview: WebView,
-              private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
-              private storage: Storage, private plt: Platform, private loadingController: LoadingController,
-              private ref: ChangeDetectorRef, private filePath: FilePath, private imageService: ImagerecognitionService) { }
+    private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
+    private storage: Storage, private plt: Platform, private loadingController: LoadingController,
+    private ref: ChangeDetectorRef, private filePath: FilePath, private imageService: ImagerecognitionService) { }
 
   ngOnInit() {
     this.plt.ready().then(() => {
@@ -212,8 +212,10 @@ export class HomePage implements OnInit {
         })
       )
       .subscribe(res => {
-        if (res.success) {
-          this.presentToast('File upload complete.');
+        console.log(res);
+        if (res) {
+          const resString = JSON.stringify(res);
+          this.presentToast(resString);
         } else {
           this.presentToast('File upload failed.');
         }
