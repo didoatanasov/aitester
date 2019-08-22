@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  SESSION_TIMEOUT: 1800, // Timeout in seconds
+  ALLOW_FEEDBACK: true,
+  HTTP_TIMEOUT: 10000,
+  APP_TYPE: 'mobile',
+  version: '0.0.1',
+  buildDate: 'Thu, 22 Aug 2019 15:45:53 GMT'
 };
 
 /*

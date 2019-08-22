@@ -5,8 +5,10 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve -c",
     "build": "ng build",
+    "build:android": "cp android-certs/release-signing.properties platforms/android/ && node ./replace.build.js && ionic cordova build android --prod --release",
+    "build:ios": "ionic cordova build ios --prod --release",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -26,6 +26,7 @@ tmp/
 temp/
 platforms/
 plugins/
+android-certs/*
 plugins/android.json
 plugins/ios.json
 $RECYCLE.BIN/
