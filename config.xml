@@ -103,6 +103,6 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-camera" spec="^4.1.0" />
-    <allow-navigation href="http://localhost:8100" sessionid="7ddcb41c" />
+    <allow-navigation href="http://localhost:8100" sessionid="d3a7d2fc" />
     <engine name="browser" spec="^5.0.4" />
 </widget>
