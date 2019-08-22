@@ -18,7 +18,7 @@ export class ImagerecognitionService {
     this.http.post(this.url + this.deployedModelId, formData, {
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
     }).subscribe(data => {
-      console.log(data._body);
+      console.log(data);
     }, error => {
       console.log(error);
 
