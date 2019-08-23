@@ -56,11 +56,11 @@ export class HomePage implements OnInit {
     }
   }
 
-  async presentToast(text) {
+  async presentToast(text, time = 3000) {
     const toast = await this.toastController.create({
       message: text,
       position: 'bottom',
-      duration: 3000
+      duration: time
     });
     toast.present();
   }
@@ -201,7 +201,7 @@ export class HomePage implements OnInit {
 
     const loading = await this.loadingController.create({
       spinner: 'bubbles',
-      message: 'Uploading image...'
+      message: 'Analyzing image...'
     });
     await loading.present();
 
@@ -215,7 +215,7 @@ export class HomePage implements OnInit {
         console.log(res);
         if (res) {
           const resString = JSON.stringify(res);
-          this.presentToast(resString);
+          this.presentToast(resString, 10000);
         } else {
           this.presentToast('File upload failed.');
         }
