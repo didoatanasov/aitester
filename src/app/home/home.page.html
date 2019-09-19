@@ -11,39 +11,39 @@
 
 <ion-content padding>
   <ion-card class="welcome-card">
-    <img src="/assets/shapes.svg" alt="" />
+    <img src="/assets/logo.svg" alt="" />
     <ion-card-header>
       <ion-card-subtitle>Take a picture with AI</ion-card-subtitle>
       <ion-card-title>Just shoot a picture or select one and let IBS AI do its magic</ion-card-title>
     </ion-card-header>
 
   </ion-card>
-  <h3 text-center>Please Select PowerAI Model</h3>
+  <h3 *ngIf="selectModel == null" text-center>Please Select AI Model!</h3>
+
+  <ion-select trackBy="id" placeholder="Select AI Model" [(ngModel)]="selectModel">
+
+    <ion-select-option *ngFor="let m of models; index as pos" [value]="m">
+      {{ m.name }}
+    </ion-select-option>
+  </ion-select>
+  <h3 *ngIf="images.length == 0" text-center>Please Select Image!</h3>
 
   <ion-list>
-    <ion-item *ngFor="let m of models; index as pos" text-wrap>
+    <ion-item *ngFor="let img of images; index as pos" text-wrap>
+      <ion-thumbnail slot="start">
+        <ion-img [src]="img.path"></ion-img>
+      </ion-thumbnail>
       <ion-label>
-        {{ m.name }}
+        {{ img.name }}
       </ion-label>
+      <ion-button slot="end" fill="clear" (click)="startUpload(img)">
+        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+      </ion-button>
+      <ion-button slot="end" fill="clear" (click)="deleteImage(img, pos)">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
     </ion-item>
-    <h3 *ngIf="images.length == 0" text-center>Please Select Image!</h3>
-
-    <ion-list>
-      <ion-item *ngFor="let img of images; index as pos" text-wrap>
-        <ion-thumbnail slot="start">
-          <ion-img [src]="img.path"></ion-img>
-        </ion-thumbnail>
-        <ion-label>
-          {{ img.name }}
-        </ion-label>
-        <ion-button slot="end" fill="clear" (click)="startUpload(img)">
-          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-        </ion-button>
-        <ion-button slot="end" fill="clear" (click)="deleteImage(img, pos)">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-list>
+  </ion-list>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="primary">

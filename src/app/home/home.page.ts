@@ -1,7 +1,7 @@
 import { ImagerecognitionService } from './../services/imagerecognition.service';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PictureSourceType } from '@ionic-native/camera/ngx';
-import { ActionSheetController, ToastController, Platform, LoadingController } from '@ionic/angular';
+import { ActionSheetController, ToastController, Platform, LoadingController, NavController } from '@ionic/angular';
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { File, FileEntry } from '@ionic-native/file/ngx';
@@ -9,9 +9,11 @@ import { HttpClient } from '@angular/common/http';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Storage } from '@ionic/storage';
 import { FilePath } from '@ionic-native/file-path/ngx';
-
+import { timeout } from 'rxjs/operators';
+import { retryWhen } from 'rxjs/operators';
 import { finalize } from 'rxjs/operators';
-import { Options } from 'selenium-webdriver/firefox';
+import { Router, NavigationExtras } from '@angular/router';
+
 const STORAGE_KEY = 'ai_images';
 
 @Component({
@@ -21,7 +23,7 @@ const STORAGE_KEY = 'ai_images';
 })
 export class HomePage implements OnInit {
   images = [];
-  models = [
+  models: { id: string, name: string, url: string }[] = [
     {
       id: '1',
       name: 'Doc Regions Model',
@@ -43,10 +45,13 @@ export class HomePage implements OnInit {
       url: 'http://192.168.62.246:6004/inference'
     },
   ];
-  constructor(private camera: Camera, private file: File, private http: HttpClient, private webview: WebView,
-    private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
-    private storage: Storage, private plt: Platform, private loadingController: LoadingController,
-    private ref: ChangeDetectorRef, private filePath: FilePath, private imageService: ImagerecognitionService) { }
+
+  selectModel: { id: string, name: string, url: string } = null;
+  constructor(private camera: Camera, private file: File, private http: HttpClient,
+              private webview: WebView, private router: Router,
+              private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
+              private storage: Storage, private plt: Platform, private loadingController: LoadingController,
+              private ref: ChangeDetectorRef, private filePath: FilePath, private imageService: ImagerecognitionService) { }
 
   ngOnInit() {
     this.plt.ready().then(() => {
@@ -90,27 +95,32 @@ export class HomePage implements OnInit {
 
 
   async selectImage() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Select Image source',
-      buttons: [{
-        text: 'Load from Library',
-        handler: () => {
-          this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+    if (this.selectModel != null) {
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Select Image source',
+        buttons: [{
+          text: 'Load from Library',
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+        },
+        {
+          text: 'Use Camera',
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.CAMERA);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
         }
-      },
-      {
-        text: 'Use Camera',
-        handler: () => {
-          this.takePicture(this.camera.PictureSourceType.CAMERA);
-        }
-      },
-      {
-        text: 'Cancel',
-        role: 'cancel'
-      }
-      ]
-    });
-    await actionSheet.present();
+        ]
+      });
+      await actionSheet.present();
+    } else {
+      this.presentToast('Please, choose AI model first', 5000);
+
+    }
   }
 
   takePicture(sourceType: PictureSourceType) {
@@ -194,15 +204,32 @@ export class HomePage implements OnInit {
     });
   }
 
+  async checkConnection() {
+
+    const networkPresent = await this.http.get('http://192.168.62.246:8081').pipe(
+      timeout(2000)).subscribe(() => true,
+        error => false);
+    return networkPresent;
+  }
+
 
   startUpload(imgEntry) {
-    this.file.resolveLocalFilesystemUrl(imgEntry.filePath)
-      .then(entry => {
-        (entry as FileEntry).file(file => this.readFile(file));
-      })
-      .catch(err => {
-        this.presentToast('Error while reading file.');
-      });
+    if (this.checkConnection()) {
+      if (this.selectModel != null) {
+
+        this.file.resolveLocalFilesystemUrl(imgEntry.filePath)
+          .then(entry => {
+            (entry as FileEntry).file(file => this.readFile(file));
+          })
+          .catch(err => {
+            this.presentToast('Error while reading file.');
+          });
+      } else {
+        this.presentToast('Please, select model first!', 5000);
+      }
+    } else {
+      this.presentToast('Please connect to IBS VPN first!!!');
+    }
   }
 
   readFile(file: any) {
@@ -226,22 +253,40 @@ export class HomePage implements OnInit {
     });
     await loading.present();
 
-    this.http.post('https://192.168.62.246/powerai-vision/api/dlapis/8af19aa4-2e78-4d81-b858-082369749f42', formData)
+
+    this.http.post(this.selectModel.url, formData)
       .pipe(
         finalize(() => {
           loading.dismiss();
-        })
+        }),
+        timeout(10000)
       )
       .subscribe(res => {
         console.log(res);
         if (res) {
-          const resString = JSON.stringify(res);
-          this.presentToast(resString, 10000);
+          this.gotoResult(res);
+          // const resString = JSON.stringify(res);
+          // this.presentToast(resString, 10000);
         } else {
           this.presentToast('File upload failed.');
         }
-      });
+      },
+        error => {
+          loading.dismiss();
+          this.presentToast('Operation failed. Please check VPN connection');
+
+        });
   }
+
+  gotoResult(result: any) {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        data: result
+      }
+    };
+    this.router.navigate(['/result'], navigationExtras);
+  }
+
 }
 
 
