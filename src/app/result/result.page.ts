@@ -15,7 +15,7 @@ export class ResultPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.data = this.router.getCurrentNavigation().extras.state.data;
-        this.strData = JSON.stringify(this.data);
+        this.strData = JSON.stringify(this.data,null,4);
         console.log('Data read');
       }
     });
