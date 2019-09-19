@@ -21,7 +21,28 @@ const STORAGE_KEY = 'ai_images';
 })
 export class HomePage implements OnInit {
   images = [];
-
+  models = [
+    {
+      id: '1',
+      name: 'Doc Regions Model',
+      url: 'http://192.168.62.246:6001/inference'
+    },
+    {
+      id: '2',
+      name: 'Doc Checked Elements Model',
+      url: 'http://192.168.62.246:6002/inference'
+    },
+    {
+      id: '3',
+      name: 'Doc Regions Aug Model',
+      url: 'http://192.168.62.246:6003/inference'
+    },
+    {
+      id: '4',
+      name: '101 Object Categories Model',
+      url: 'http://192.168.62.246:6004/inference'
+    },
+  ];
   constructor(private camera: Camera, private file: File, private http: HttpClient, private webview: WebView,
     private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
     private storage: Storage, private plt: Platform, private loadingController: LoadingController,
