@@ -57,6 +57,12 @@ export class HomePage implements OnInit {
     this.plt.ready().then(() => {
       this.loadStoredImages();
     });
+    if (this.checkConnection()) {
+      // this.presentToast('ONLINE');
+    } else {
+      this.presentToast('Please connect to IBS VPN first!', 4000);
+
+    }
   }
   loadStoredImages() {
     this.storage.get(STORAGE_KEY).then(images => {

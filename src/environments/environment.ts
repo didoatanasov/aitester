@@ -8,8 +8,8 @@ export const environment = {
   ALLOW_FEEDBACK: true,
   HTTP_TIMEOUT: 10000,
   APP_TYPE: 'mobile',
-  version: '0.0.1',
-  buildDate: 'Fri, 23 Aug 2019 05:52:35 GMT'
+  version: '1.0.0',
+  buildDate: 'Thu, 19 Sep 2019 16:27:23 GMT'
 };
 
 /*
