@@ -18,8 +18,7 @@
     </ion-card-header>
 
   </ion-card>
-  <h3 *ngIf="selectModel == null" text-center>Please Select AI Model!</h3>
-
+  <ion-label>Model:</ion-label>
   <ion-select trackBy="id" placeholder="Select AI Model" [(ngModel)]="selectModel">
 
     <ion-select-option *ngFor="let m of models; index as pos" [value]="m">
