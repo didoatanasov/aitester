@@ -48,10 +48,10 @@ export class HomePage implements OnInit {
 
   selectModel: { id: string, name: string, url: string } = null;
   constructor(private camera: Camera, private file: File, private http: HttpClient,
-              private webview: WebView, private router: Router,
-              private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
-              private storage: Storage, private plt: Platform, private loadingController: LoadingController,
-              private ref: ChangeDetectorRef, private filePath: FilePath, private imageService: ImagerecognitionService) { }
+    private webview: WebView, private router: Router,
+    private actionSheetController: ActionSheetController, private toastController: ToastController, private platform: Platform,
+    private storage: Storage, private plt: Platform, private loadingController: LoadingController,
+    private ref: ChangeDetectorRef, private filePath: FilePath, private imageService: ImagerecognitionService) { }
 
   ngOnInit() {
     this.plt.ready().then(() => {
@@ -287,7 +287,8 @@ export class HomePage implements OnInit {
   gotoResult(result: any) {
     const navigationExtras: NavigationExtras = {
       state: {
-        data: result
+        data: result,
+        modelId: this.selectModel.id
       }
     };
     this.router.navigate(['/result'], navigationExtras);

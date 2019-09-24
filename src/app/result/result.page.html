@@ -13,8 +13,58 @@
 
 <ion-content>
   <h2>Result Data:</h2>
+  <ion-list>
+    <ion-item>
+      <ion-label>Result:</ion-label>
+      <ion-text>{{data.result}}</ion-text>
+    </ion-item>
 
+    <ng-container *ngIf="modelId < 4">
+      <ng-container *ngFor="let item of data.classified">
+        <ion-item>
+          <ion-label><b>REGION</b></ion-label>
+          <ion-text>{{item.confidence}}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Confidence</ion-label>
+          <ion-text>{{item.confidence}}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Label</ion-label>
+          <ion-text>{{item.label}}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>xmin</ion-label>
+          <ion-text>{{item.xmin}}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Ymin</ion-label>
+          <ion-text>{{item.ymin}}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Xmax</ion-label>
+          <ion-text>{{item.xmax}}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Ymax</ion-label>
+          <ion-text>{{item.ymax}}</ion-text>
+        </ion-item>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="modelId==4">
+
+      <ion-item *ngIf="data.classified">
+        <ion-label>Category:</ion-label>
+        <ion-text>{{data.classified[0]}}</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-label>Confidence:</ion-label>
+        <ion-text>{{data.classified[1]}}</ion-text>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+  <h3>Raw:</h3>
   <div class='preformated'>
-  {{strData}}
+    {{strData}}
   </div>
 </ion-content>
