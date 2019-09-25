@@ -9,7 +9,7 @@ export const environment = {
   HTTP_TIMEOUT: 10000,
   APP_TYPE: 'mobile',
   version: '1.0.0',
-  buildDate: 'Fri, 20 Sep 2019 04:58:47 GMT'
+  buildDate: 'Wed, 25 Sep 2019 05:35:22 GMT'
 };
 
 /*

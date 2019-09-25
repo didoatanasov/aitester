@@ -246,6 +246,8 @@ export class HomePage implements OnInit {
         type: file.type
       });
       formData.append('files', imgBlob, file.name);
+      formData.append('containHeatMap', 'true');
+      formData.append('containRle', 'true');
       this.uploadImageData(formData);
     };
     reader.readAsArrayBuffer(file);

@@ -9,6 +9,8 @@
     "build": "ng build",
     "build:android": "cp android-certs/release-signing.properties platforms/android/ && node ./replace.build.js && ionic cordova build android --prod --release",
     "build:ios": "ionic cordova build ios --prod --release",
+    "run:android": "ionic cordova run android",
+    "run:ios": "ionic cordova run ios",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
